@@ -1,0 +1,16 @@
+#search_btn{
+    padding: 10px;
+    border: 1px solid #eaeaea;
+    width: max-content;
+    transition: 1s all;
+}
+#search_btn:hover{
+    cursor: pointer;
+    background-color: darkgray;
+
+}
+.result_obj{
+    border: 1px solid #eaeaea;
+    width: max-content;
+    background-color: blanchedalmond;
+}

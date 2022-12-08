@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="{% static 'card_list.css' %}" rel="stylesheet">
+    <title>Card list page</title>
+</head>
+<body>
+<div class="card_list">
+<div class="card_item">
+{% for card in cards %}
+    <a href="{{ card.get_absolute_url }}">Карта №{{ card.pk }}</a>
+    <p>Серия - {{ card.series }}</p>
+    <p>Номер - {{ card.number }}</p>
+    <p>Дата выпуска - {{ card.release_date }}</p>
+    <p>Дата окончания действия - {{ card.expiration_date }}</p>
+    <p>Статус - {{ card.status }}</p>
+{% endfor %}
+</div>
+</div>
+</body>
+</html>

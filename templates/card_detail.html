@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta charset="UTF-8">
+    <title>Card detail</title>
+</head>
+<body>
+<div>
+    <div class="card_info">
+       <p>Серия карты - {{ card.series }}</p>
+       <p>Номер карты {{ card.number }}</p>
+       <p>Дата выпуска {{ card.release_date }}</p>
+       <p>Дата истечения срока {{ card.expiration_date }}</p>
+       <p>Дата последнего использования {{ card.last_usage_date }}</p>
+       <p>Валюта карты {{ card.currency }}</p>
+       <p>Баланс {{ card.balance }}</p>
+    <p>Статус <span id="status_card">{{ card.status }}</span></p>
+    </div>
+    <div>
+        <h1>Список покупок</h1>
+        {% for order in orders %}
+            <p>{% for item in order.items.all %}
+                <span>{{ item.name }}</span>
+                {% endfor %}</p>
+        {% endfor %}
+    </div>
+    <div class="delete_card">
+        <a href="{% url 'card:card_delete' card.pk %}">Удалить карту</a>
+    </div>
+    <div class="activate_deactivate_card">
+    {% if card.status == 'ACTIVATED' %}
+        <p id="activate">Deactivate card</p>
+    {% elif card.status == 'NON_ACTIVATED' %}
+        <p id="activate">Activate card</p>
+    {% endif %}
+    {% csrf_token %}
+    </div>
+</div>
+<script>
+    let activate = $('#activate')
+    let status = $('#status_card')
+    activate.click(function (){
+        $.ajax({
+            type: 'POST',
+            url: '{% url "card:card_activation" %}',
+            data:
+                {
+                    card: '{{ card.pk }}',
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                },
+            success: function (response){
+                if (response.changed_to === 'deactivated'){
+                    status.text('NON_ACTIVATED')
+                    activate.text('Activate card')
+                }
+                else{
+                     status.text('ACTIVATED')
+                    activate.text('Deactivate card')
+                }
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

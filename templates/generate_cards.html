@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="POST">
+    <input name="series" placeholder="Серия" type="text">
+    <input name="num_cards" placeholder="Количество карт" type="number">
+    <select name="exp_date">
+        <option value="1 год">1 год</option>
+        <option value="6 месяцев">6 месяцев</option>
+        <option value="1 месяц">1 месяц</option>
+    </select>
+    <button type="submit">Сгенерировать</button>
+    {% csrf_token %}
+</form>
+
+</body>
+</html>

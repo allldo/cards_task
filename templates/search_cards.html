@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <meta charset="UTF-8">
+    <title>Searching cards</title>
+    <link rel="stylesheet" href="{% static 'search_page.css' %}">
+</head>
+<body>
+<input name="series" type="text" id="series" placeholder="Серия">
+<input name="release_date" id="release_date" type="date" placeholder="Дата выпуска">
+<input name="exp_date" id="exp_date" type="date"  placeholder="Дата окончания активности">
+<select name="status" id="status">
+  <option value="ACTIVATED">ACTIVATED</option>
+  <option value="NON_ACTIVATED">NON_ACTIVATED</option>
+  <option value="EXPIRED">EXPIRED</option>
+</select>
+<p id="search_btn">search</p>
+<div class="list_results">
+
+</div>
+<script>
+    let series = $('#series')
+    let release_date = $('#release_date')
+    let exp_date = $('#exp_date')
+    let status = $('#status')
+    $('#search_btn').click(function (){
+        console.log(series.text())
+        $('.result_obj').remove()
+        $.ajax({
+            type: 'GET',
+            url: '{% url "card:search_cards" %}',
+            data:
+                {
+                    series: series.val(),
+                    release_date: release_date.val(),
+                    exp_date: exp_date.val(),
+                    status: status.val(),
+                },
+
+            success: function (response){
+                console.log(response.cards)
+                for (let c=0; c< response.cards.length;c++) {
+                    let cur_obj = response.cards[c]
+
+                    if ($('#'+cur_obj.id).length) {
+                    }
+                    else {
+                        $('.list_results').append(
+                            $('<div></div>').append(
+                                $('<p></p>').text(cur_obj.status),
+                                $('<p></p>').text(cur_obj.expiration_date),
+                                $('<p></p>').text(cur_obj.release_date),
+                                $('<p></p>').text(cur_obj.number),
+                                $('<p></p>').text(cur_obj.currency),
+                                $('<p></p>').text(cur_obj.balance),
+                            ).attr('id', cur_obj.id).addClass('result_obj')
+                        )
+                    }
+
+
+                }
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
